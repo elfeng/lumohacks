@@ -19,10 +19,10 @@ class Doctor(models.Model):
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    doctor = models.ForeignKey(Doctor)
-    weight = models.IntegerField()
-    age = models.IntegerField()
-    gender = models.IntegerField()
+    doctor = models.ForeignKey(Doctor, null=True)
+    weight = models.IntegerField(null=True)
+    age = models.IntegerField(null=True)
+    gender = models.IntegerField(null=True)
     blood_pressure = models.IntegerField(null=True)
     smoking = models.IntegerField(null=True)
     constipation = models.IntegerField(null=True)
