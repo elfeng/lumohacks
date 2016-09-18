@@ -1,0 +1,295 @@
+# Back-Propagation Neural Networks
+#
+# Written in Python.  See http://www.python.org/
+# Placed in the public domain.
+# Neil Schemenauer <nas@arctrix.com>
+
+import math
+import random
+import string
+
+random.seed(0)
+
+
+# calculate a random number where:  a <= rand < b
+def rand(a, b):
+    return (b - a) * random.random() + a
+
+
+# Make a matrix (we could use NumPy to speed this up)
+def makeMatrix(I, J, fill = 0.0):
+    m = []
+    for i in range(I):
+        m.append([fill] * J)
+    return m
+
+
+# our sigmoid function, tanh is a little nicer than the standard 1/(1+e^-x)
+def sigmoid(x):
+    return math.tanh(x)
+
+
+# derivative of our sigmoid function, in terms of the output (i.e. y)
+def dsigmoid(y):
+    return 1.0 - y ** 2
+
+
+class NN:
+    def __init__(self, ni, nh, no):
+        # number of input, hidden, and output nodes
+        self.ni = ni + 1  # +1 for bias node
+        self.nh = nh
+        self.no = no
+
+        # activations for nodes
+        self.ai = [1.0] * self.ni
+        self.ah = [1.0] * self.nh
+        self.ao = [1.0] * self.no
+
+        # create weights
+        self.wi = makeMatrix(self.ni, self.nh)
+        self.wo = makeMatrix(self.nh, self.no)
+        # set them to random vaules
+        for i in range(self.ni):
+            for j in range(self.nh):
+                self.wi[i][j] = rand(-0.2, 0.2)
+        for j in range(self.nh):
+            for k in range(self.no):
+                self.wo[j][k] = rand(-2.0, 2.0)
+
+        # last change in weights for momentum
+        self.ci = makeMatrix(self.ni, self.nh)
+        self.co = makeMatrix(self.nh, self.no)
+
+    def update(self, inputs):
+        if len(inputs) != self.ni - 1:
+            raise ValueError('wrong number of inputs')
+
+        # input activations
+        for i in range(self.ni - 1):
+            # self.ai[i] = sigmoid(inputs[i])
+            self.ai[i] = inputs[i]
+
+        # hidden activations
+        for j in range(self.nh):
+            sum = 0.0
+            for i in range(self.ni):
+                sum = sum + self.ai[i] * self.wi[i][j]
+            self.ah[j] = sigmoid(sum)
+
+        # output activations
+        for k in range(self.no):
+            sum = 0.0
+            for j in range(self.nh):
+                sum = sum + self.ah[j] * self.wo[j][k]
+            self.ao[k] = sigmoid(sum)
+
+        return self.ao[:]
+
+    def backPropagate(self, targets, N, M):
+        if len(targets) != self.no:
+            raise ValueError('wrong number of target values')
+
+        # calculate error terms for output
+        output_deltas = [0.0] * self.no
+        for k in range(self.no):
+            error = targets[k] - self.ao[k]
+            output_deltas[k] = dsigmoid(self.ao[k]) * error
+
+        # calculate error terms for hidden
+        hidden_deltas = [0.0] * self.nh
+        for j in range(self.nh):
+            error = 0.0
+            for k in range(self.no):
+                error = error + output_deltas[k] * self.wo[j][k]
+            hidden_deltas[j] = dsigmoid(self.ah[j]) * error
+
+        # update output weights
+        for j in range(self.nh):
+            for k in range(self.no):
+                change = output_deltas[k] * self.ah[j]
+                self.wo[j][k] = self.wo[j][k] + N * change + M * self.co[j][k]
+                self.co[j][k] = change
+                # print N*change, M*self.co[j][k]
+
+        # update input weights
+        for i in range(self.ni):
+            for j in range(self.nh):
+                change = hidden_deltas[j] * self.ai[i]
+                self.wi[i][j] = self.wi[i][j] + N * change + M * self.ci[i][j]
+                self.ci[i][j] = change
+
+        # calculate error
+        error = 0.0
+        for k in range(len(targets)):
+            error = error + 0.5 * (targets[k] - self.ao[k]) ** 2
+        return error
+
+    def test(self, patterns):
+        for p in patterns:
+            return self.update(p[0])
+
+    def weights(self):
+        print('Input weights:')
+        for i in range(self.ni):
+            print(self.wi[i])
+        print()
+        print('Output weights:')
+        for j in range(self.nh):
+            print(self.wo[j])
+
+    def train(self, patterns, iterations = 1000, N = 0.5, M = 0.1):
+        # N: learning rate
+        # M: momentum factor
+        for i in range(iterations):
+            error = 0.0
+            for p in patterns:
+                inputs = p[0]
+                targets = p[1]
+                self.update(inputs)
+                error = error + self.backPropagate(targets, N, M)
+            if i % 100 == 0:
+                print('error %-.5f' % error)
+
+
+def demo(pattern,input):
+    # Teach network XOR function
+
+    pat_fats = [
+        [[0.5, 0, 0, 1, 0, 0, 0, 0, 1], [0.4]],
+        [[0.6, 0, 0, 1, 0, 0, 0, 0, 1], [0.3]],
+        [[0.7, 0, 0, 1, 0, 0, 0, 0, 1], [0.2]],
+        [[0.8, 0, 0, 1, 0, 0, 0, 0, 1], [0.1]],
+        [[0.5, 0, 0, 0, 0, 0, 0, 0, 1], [0.45]],
+        [[0.6, 0, 0, 0, 0, 0, 0, 0, 1], [0.35]],
+        [[0.7, 0, 0, 0, 0, 0, 0, 0, 1], [0.25]],
+        [[0.8, 0, 1, 0, 0, 0, 0, 0, 1], [0.15]],
+        [[0.5, 0, 1, 0, 0, 0, 0, 0, 1], [0.55]],
+        [[0.6, 0, 1, 0, 0, 0, 0, 0, 1], [0.45]],
+        [[0.7, 0, 1, 0, 0, 0, 0, 0, 1], [0.35]],
+        [[0.8, 0, 1, 0, 0, 0, 0, 0, 1], [0.25]],
+        [[0.5, 0, 0, 0, 0, 0, 0, 0, 0], [0.5]],
+        [[0.6, 0, 0, 0, 0, 0, 0, 0, 0], [0.4]],
+        [[0.7, 0, 0, 0, 0, 0, 0, 0, 0], [0.3]],
+        [[0.8, 0, 0, 0, 0, 0, 0, 0, 0], [0.2]],
+
+    ]
+
+
+    pat_fruits = [
+        [[0.5, 0, 0, 1, 0, 0, 0, 0, 1], [0.3]],
+        [[0.6, 0, 0, 1, 0, 0, 0, 0, 1], [0.9]],
+        [[0.7, 0, 0, 1, 0, 0, 0, 0, 1], [0.2]],
+        [[0.8, 0, 0, 1, 0, 0, 0, 0, 1], [0.3]],
+        [[0.5, 0, 0, 0, 0, 0, 0, 0, 1], [0.63]],
+        [[0.6, 0, 0, 0, 0, 0, 0, 0, 1], [0.45]],
+        [[0.7, 0, 0, 0, 0, 0, 0, 0, 1], [0.55]],
+        [[0.8, 0, 1, 0, 0, 0, 0, 0, 1], [0.25]],
+        [[0.5, 0, 1, 0, 0, 0, 0, 0, 1], [0.52]],
+        [[0.6, 0, 1, 0, 0, 0, 0, 0, 1], [0.53]],
+        [[0.7, 0, 1, 0, 0, 0, 0, 0, 1], [0.63]],
+        [[0.8, 0, 1, 0, 0, 0, 0, 0, 1], [0.72]],
+        [[0.5, 0, 0, 0, 0, 0, 0, 0, 0], [0.63]],
+        [[0.6, 0, 0, 0, 0, 0, 0, 0, 0], [0.42]],
+        [[0.7, 0, 0, 0, 0, 0, 0, 0, 0], [0.63]],
+        [[0.8, 0, 0, 0, 0, 0, 0, 0, 0], [0.22]]]
+
+    pat_grain = [
+        [[0.5, 0, 0, 1, 0, 0, 0, 0, 1], [0.3]],
+        [[0.6, 0, 0, 1, 0, 0, 0, 0, 1], [0.5]],
+        [[0.7, 0, 0, 1, 0, 0, 0, 0, 1], [0.5]],
+        [[0.8, 0, 0, 1, 0, 0, 0, 0, 1], [0.7]],
+        [[0.5, 0, 0, 0, 0, 0, 0, 0, 1], [0.33]],
+        [[0.6, 0, 0, 0, 0, 0, 0, 0, 1], [0.73]],
+        [[0.7, 0, 0, 0, 0, 0, 0, 0, 1], [0.35]],
+        [[0.8, 0, 1, 0, 0, 0, 0, 0, 1], [0.7]],
+        [[0.5, 0, 1, 0, 0, 0, 0, 0, 1], [0.35]],
+        [[0.6, 0, 1, 0, 0, 0, 0, 0, 1], [0.34]],
+        [[0.7, 0, 1, 0, 0, 0, 0, 0, 1], [0.74]],
+        [[0.8, 0, 1, 0, 0, 0, 0, 0, 1], [0.7]],
+        [[0.5, 0, 0, 0, 0, 0, 0, 0, 0], [0.93]],
+        [[0.6, 0, 0, 0, 0, 0, 0, 0, 0], [0.3]],
+        [[0.7, 0, 0, 0, 0, 0, 0, 0, 0], [0.7]],
+        [[0.8, 0, 0, 0, 0, 0, 0, 0, 0], [0.83]]]
+
+    pat_dairy = [
+        [[0.5, 0, 0, 1, 0, 0, 0, 0, 1], [0.3]],
+        [[0.6, 0, 0, 1, 0, 0, 0, 0, 1], [0.6]],
+        [[0.7, 0, 0, 1, 0, 0, 0, 0, 1], [0.3]],
+        [[0.8, 0, 0, 1, 0, 0, 0, 0, 1], [0.84]],
+        [[0.5, 0, 0, 0, 0, 0, 0, 0, 1], [0.37]],
+        [[0.6, 0, 0, 0, 0, 0, 0, 0, 1], [0.7]],
+        [[0.7, 0, 0, 0, 0, 0, 0, 0, 1], [0.75]],
+        [[0.8, 0, 1, 0, 0, 0, 0, 0, 1], [0.93]],
+        [[0.5, 0, 1, 0, 0, 0, 0, 0, 1], [0.34]],
+        [[0.6, 0, 1, 0, 0, 0, 0, 0, 1], [0.64]],
+        [[0.7, 0, 1, 0, 0, 0, 0, 0, 1], [0.7]],
+        [[0.8, 0, 1, 0, 0, 0, 0, 0, 1], [0.7]],
+        [[0.5, 0, 0, 0, 0, 0, 0, 0, 0], [0.93]],
+        [[0.6, 0, 0, 0, 0, 0, 0, 0, 0], [0.7]],
+        [[0.7, 0, 0, 0, 0, 0, 0, 0, 0], [0.2]],
+        [[0.8, 0, 0, 0, 0, 0, 0, 0, 0], [0.3]]]
+
+    pat_vegetables = [
+        [[0.5, 0, 0, 1, 0, 0, 0, 0, 1], [0.6]],
+        [[0.6, 0, 0, 1, 0, 0, 0, 0, 1], [0.32]],
+        [[0.7, 0, 0, 1, 0, 0, 0, 0, 1], [0.84]],
+        [[0.8, 0, 0, 1, 0, 0, 0, 0, 1], [0.4]],
+        [[0.5, 0, 0, 0, 0, 0, 0, 0, 1], [0.3]],
+        [[0.6, 0, 0, 0, 0, 0, 0, 0, 1], [0.7]],
+        [[0.7, 0, 0, 0, 0, 0, 0, 0, 1], [0.5]],
+        [[0.8, 0, 1, 0, 0, 0, 0, 0, 1], [0.9]],
+        [[0.5, 0, 1, 0, 0, 0, 0, 0, 1], [0.4]],
+        [[0.6, 0, 1, 0, 0, 0, 0, 0, 1], [0.6]],
+        [[0.7, 0, 1, 0, 0, 0, 0, 0, 1], [0.77]],
+        [[0.8, 0, 1, 0, 0, 0, 0, 0, 1], [0.79]],
+        [[0.5, 0, 0, 0, 0, 0, 0, 0, 0], [0.3]],
+        [[0.6, 0, 0, 0, 0, 0, 0, 0, 0], [0.9]],
+        [[0.7, 0, 0, 0, 0, 0, 0, 0, 0], [0.24]],
+        [[0.8, 0, 0, 0, 0, 0, 0, 0, 0], [0.42]]]
+
+    pat_protein=[
+        [[0.5, 0, 0, 1, 0, 0, 0, 0, 1], [0.33]],
+        [[0.6, 0, 0, 1, 0, 0, 0, 0, 1], [0.47]],
+        [[0.7, 0, 0, 1, 0, 0, 0, 0, 1], [0.50]],
+        [[0.8, 0, 0, 1, 0, 0, 0, 0, 1], [0.62]],
+        [[0.5, 0, 0, 0, 0, 0, 0, 0, 1], [0.41]],
+        [[0.6, 0, 0, 0, 0, 0, 0, 0, 1], [0.51]],
+        [[0.7, 0, 0, 0, 0, 0, 0, 0, 1], [0.61]],
+        [[0.8, 0, 0, 0, 0, 0, 0, 0, 1], [0.71]],
+        [[0.5, 0, 1, 0, 0, 0, 0, 0, 1], [0.31]],
+        [[0.6, 0, 1, 0, 0, 0, 0, 0, 1], [0.41]],
+        [[0.7, 0, 1, 0, 0, 0, 0, 0, 1], [0.51]],
+        [[0.8, 0, 1, 0, 0, 0, 0, 0, 1], [0.61]],
+        [[0.5, 0, 0, 0, 0, 0, 0, 0, 0], [0.53]],
+        [[0.6, 0, 0, 0, 0, 0, 0, 0, 0], [0.63]],
+        [[0.7, 0, 0, 0, 0, 0, 0, 0, 0], [0.73]],
+        [[0.8, 0, 0, 0, 0, 0, 0, 0, 0], [0.83]],
+    ]
+
+
+
+    # create a network with two input, two hidden, and one output nodes
+    n = NN(9, 2, 1)
+
+    if pattern == "fruits":
+        # train it with some patterns
+        n.train(pat_fruits)
+    elif pattern == "grain":
+        # train it with some patterns
+        n.train(pat_grain)
+    elif pattern == "dairy":
+        # train it with some patterns
+        n.train(pat_fats)
+    elif pattern == "vegetables":
+        # train it with some patterns
+        n.train(pat_vegetables)
+    elif pattern == "protein":
+        # train it with some patterns
+        n.train(pat_protein)
+    elif pattern == "fats":
+        # train it with some patterns
+        n.train(pat_fats)
+
+    # test it
+    return n.test(input)
