@@ -14,7 +14,7 @@ class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     weight = models.IntegerField()
     age = models.IntegerField()
-    gender = models.CharField(max_length=1)
+    gender = models.IntegerField()
 
 
 class Doctor(models.Model):

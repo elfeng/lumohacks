@@ -19,4 +19,3 @@ class Pain(TimeStampedModel):
     patient = models.ForeignKey(Patient)
     location = models.CharField(max_length=128)
     severity = models.IntegerField()
-
