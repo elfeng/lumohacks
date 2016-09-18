@@ -19,6 +19,7 @@ class Doctor(models.Model):
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=128)
     doctor = models.ForeignKey(Doctor, null=True)
     weight = models.IntegerField(null=True)
     age = models.IntegerField(null=True)

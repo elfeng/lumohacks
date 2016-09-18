@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block style %}
+    <link href="{% static 'css/doctor.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'setting' %}"  method="POST">
+        {% csrf_token %}
+        <p>Name</p>
+        <input type="text" placeholder="Name" name="name">
+        <p>Weight</p>
+        <input type="text" placeholder="Weight" name="weight">
+        <p>Age</p>
+        <input type="text" placeholder="Age" name="age">
+        <p>Gender</p>
+        <input type="text" placeholder="Gender" name="gender">
+        <p>Do you have high blood pressure?</p>
+        <input type="text" placeholder="Do you have high blood pressure?" name="blood-pressure">
+        <p>Do you smoke?</p>
+        <input type="text" placeholder="Do you smoke?" name="smoke">
+        <p>Are you constipated?</p>
+        <input type="text" placeholder="Are you constipated?" name="constipation">
+        <p>Do you have diabetes</p>
+        <input type="text" placeholder="Do you have diabetes?" name="diabetes">
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}

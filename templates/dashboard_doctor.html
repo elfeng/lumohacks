@@ -1,4 +1,4 @@
-{%  extends "base.html" %}
+{% extends "base.html" %}
 {% load staticfiles %}
 
 {% block style %}
@@ -32,31 +32,30 @@
 
           <h2>List of Patients</h2>
           <div class="table-responsive">
-            <table class="table table-hover table-bordered table-sm">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Created Date</th>
-                  <th>Modified Date</th>
-                </tr>
-              </thead>
-              <tbody>
             {% if patient_list %}
-                {% for patient in patient_list %}
-                    <a href="doctor-individual-diagnosis.html"><tr>
-                        <td>{{ patient.name }}</td>
-                        <td>{{ patient.created }}</td>
-                        <td>{{ patient.modified }}</td>
-                    </tr></a>
-                {% endfor %}
-            {% else %}
-                <p>No patients are available.</p>
-            {% endif %}
+                <table class="table table-hover table-bordered table-sm">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Created Date</th>
+                      <th>Modified Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for patient in patient_list %}
+                        <a href="doctor-individual-diagnosis.html"><tr>
+                            <td>{{ patient.name }}</td>
+                            <td>2016/6/20</td>
+                            <td>2016/9/15</td>
+                        </tr></a>
+                    {% endfor %}
               </tbody>
             </table>
+                {% else %}
+                <p>No patients are available.</p>
+            {% endif %}
           </div>
         </div>
       </div>
     </div>
-
     {% endblock %}
