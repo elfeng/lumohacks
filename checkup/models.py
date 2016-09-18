@@ -16,3 +16,8 @@ class Diagnose(TimeStampedModel):
     note = models.TextField()
     treatment = models.IntegerField(choices=TREATMENT_CHOICES)
     duration = models.IntegerField()
+
+
+class Matrix(models.Model):
+    name = models.CharField(max_length=128)
+    matrix = models.TextField()

@@ -13,6 +13,9 @@ class TimeStampedModel(models.Model):
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def __unicode__(self):
+        return unicode(self.user.username)
+
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
