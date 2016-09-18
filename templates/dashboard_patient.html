@@ -18,9 +18,7 @@
       <a class="navbar-brand" href="#">Cancer Patient Lifestyle Diary</a>
       <div id="navbar">
         <nav class="nav navbar-nav pull-xs-left">
-          <a class="nav-item nav-link" href="#">Dashboard</a>
           <a class="nav-item nav-link" href="#">Settings</a>
-          <a class="nav-item nav-link" href="#">Profile</a>
           <a class="nav-item nav-link" href="#">Help</a>
         </nav>
         <form class="pull-xs-right">
@@ -31,36 +29,27 @@
 
  <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="dashboard_doctor.html">List of Patients<span class="sr-only">(current)</span></a></li>
-          </ul>
-        </div>
-        <div class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 main">
+        <div class="col-sm-12 col-md-12 main">
             <h1>
-                Hello, Doctor!</h1>
+                Hello!
+            </h1>
         
           
    <form>
+
   <div class="form-group">
     <label for="exampleInputFName">First Name</label>
     <input type="fname" class="form-control" id="exampleFirstName" aria-describedby="emailHelp" placeholder="Enter first name">  </div>
    <div class="form-group">
     <label for="exampleInputLName">Last Name</label>
     <input type="lname" class="form-control" id="exampleFirstNAme" aria-describedby="emailHelp" placeholder="Enter last name">  </div>
-       
-    <div class="form-group">
-    <label for="exampleID">ID:</label>
-         <label for="exampleID">#123456</label>  </div>
-        
+
     <div class="form-group">
     <label for="exampleDiagnosis">Diagnosis:</label>
          <label for="exampleID">Breast Cancer</label>
-    <div>
-          
-        
-        
-    <label for="exampleDiet">Diet (# servings)</label>
+    </div>
+
+    <div for="exampleDiet" action="{% url 'log' %}" method="POST">Diet (# servings)
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -72,9 +61,9 @@
                 </thead>
               <tbody>
                 <tr>
-                  <td> <label for="exampleFruit">Fruit</label></td>
+                  <td> <label name="fruit">Fruit</label></td>
                   <td>5</td>
-        <td><select class="form-control" id="exampleSelect1">
+        <td><select class="form-control" id="exampleSelect1" name="fruit-option">
           <option>1</option>
           <option>2</option>
           <option>3</option>
@@ -85,9 +74,9 @@
                 </tr>
                   
                   <tr>
-                  <td> <label for="exampleVeg">Vegetable</label></td>
+                  <td> <label name="vegetable">Vegetable</label></td>
                   <td>5</td>
-        <td><select class="form-control" id="exampleSelect1">
+        <td><select class="form-control" id="exampleSelect1" name="vegetable-option">
           <option>1</option>
           <option>2</option>
           <option>3</option>
@@ -100,9 +89,9 @@
         
         
            <tr>
-                  <td> <label for="exampleVeg">Grain</label></td>
+                  <td> <label name="grain">Grain</label></td>
                   <td>3</td>
-        <td><select class="form-control" id="exampleSelect1">
+        <td><select class="form-control" id="exampleSelect1" name="grain-option">
           <option>1</option>
           <option>2</option>
           <option>3</option>
@@ -113,9 +102,9 @@
                 </tr>
         
            <tr>
-                  <td> <label for="exampleVeg">Dairy</label></td>
+                  <td> <label name="dairy">Dairy</label></td>
                   <td>2</td>
-        <td><select class="form-control" id="exampleSelect1">
+        <td><select class="form-control" id="exampleSelect1" name="dairy-option">
           <option>1</option>
           <option>2</option>
           <option>3</option>
@@ -126,9 +115,9 @@
                 </tr>
         
            <tr>
-                  <td> <label for="exampleVeg">Portein</label></td>
+                  <td> <label name="protein">Portein</label></td>
                   <td>2</td>
-        <td><select class="form-control" id="exampleSelect1">
+        <td><select class="form-control" id="exampleSelect1" name="protein-option">
           <option>1</option>
           <option>2</option>
           <option>3</option>
@@ -139,9 +128,9 @@
                 </tr>
         
            <tr>
-                  <td> <label for="exampleVeg">Fat</label></td>
+                  <td> <label name="fat">Fat</label></td>
                   <td>1</td>
-        <td><select class="form-control" id="exampleSelect1">
+        <td><select class="form-control" id="exampleSelect1" name="fat-option">
           <option>1</option>
           <option>2</option>
           <option>3</option>
@@ -150,7 +139,8 @@
         </select></td>
                   
                 </tr>
-                </tbody></table></div></div>
+                </tbody></table>
+          </div>
     
    <label for="exampleDiet">Activity (min)</label>
           <div class="table-responsive">
@@ -166,24 +156,24 @@
                 <tr>
                   <td> <label for="exampleFruit">Light</label></td>
                   <td>30</td>
-                    <td><input type="lname" class="form-control" id="exampleFirstNAme" aria-describedby="emailHelp" placeholder="min"></td></tr>
+                    <td><input type="lname" class="form-control" id="exampleFirstNAme" aria-describedby="emailHelp" placeholder="min" name="light"></td></tr>
                     
                 <tr>
                   <td> <label for="exampleFruit">Medium</label></td>
                   <td>30</td>
-                    <td><input type="lname" class="form-control" id="exampleFirstNAme" aria-describedby="emailHelp" placeholder="min"></td></tr>    
+                    <td><input type="lname" class="form-control" id="exampleFirstNAme" aria-describedby="emailHelp" placeholder="min" name="medium"></td></tr>
                   <tr>
                   <td> <label for="exampleFruit">Vigorous</label></td>
                   <td>30</td>
-                      <td><input type="lname" class="form-control" id="exampleFirstNAme" aria-describedby="emailHelp" placeholder="min"></td></tr></tbody></table></div>
+                      <td><input type="lname" class="form-control" id="exampleFirstNAme" aria-describedby="emailHelp" placeholder="min" name="vigorous"></td></tr></tbody></table></div>
  
   <div class="form-group">
     <label for="exampleTextarea">Pain</label>
-    <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+    <textarea class="form-control" id="exampleTextarea" rows="3" name="pain"></textarea>
   </div>
         
     <label for="exampleFats">Severity</label>
-        <select class="form-control" id="exampleSelect1">
+        <select class="form-control" id="exampleSelect1" name="severity">
       <option>1</option>
       <option>2</option>
       <option>3</option>
@@ -191,12 +181,11 @@
       <option>5</option>
     </select>
         </div>
-    
- <label for="exampleFats">Progress(wks)</label>  
-       
 
- 
- 
+        <input type="submit" value="Submit">
+    </div>
+    
+ <label for="exampleFats">Progress(wks)</label>
 
 
 

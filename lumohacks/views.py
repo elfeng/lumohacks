@@ -32,13 +32,3 @@ def home(request):
         return render(request, 'dashboard_doctor.html', {})
     else:
         return render(request, 'dashboard_patient.html', {})
-
-
-def doctor(request, doctor_id):
-    doctor = Doctor.objects.get(id=doctor_id)
-    return render(request, 'dashboard_doctor.html', {doctor: doctor})
-
-
-def patient(request, patient_id):
-    patient = Patient.objects.get(id=patient_id)
-    return render(request, 'dashboard_patient.html', {patient: patient})

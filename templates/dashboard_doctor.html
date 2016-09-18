@@ -15,9 +15,8 @@
       <a class="navbar-brand" href="#">Cancer Patient Lifestyle Diary</a>
       <div id="navbar">
         <nav class="nav navbar-nav pull-xs-left">
-          <a class="nav-item nav-link" href="#">Dashboard</a>
-          <a class="nav-item nav-link" href="#">Settings</a>
           <a class="nav-item nav-link" href="#">Profile</a>
+          <a class="nav-item nav-link" href="#">Settings</a>
           <a class="nav-item nav-link" href="#">Help</a>
         </nav>
         <form class="pull-xs-right">
@@ -28,137 +27,31 @@
 
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li><a href="#">List of Patients<span class="sr-only">(current)</span></a></li>
-            <!-- <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li> -->
-          </ul>
-        </div>
-        <div class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 main">
+        <div class="col-sm-12 col-md-12 main">
           <h1>Hello, Doctor!</h1>
 
-          <!-- <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-fluid" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-fluid" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-fluid" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-fluid" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-          </div> -->
-
-          <h2>Patients' Diagnoses</h2>
+          <h2>List of Patients</h2>
           <div class="table-responsive">
             <table class="table table-hover table-bordered table-sm">
               <thead>
                 <tr>
-                  <th>#</th>
                   <th>Name</th>
-                  <th>Status</th>
                   <th>Created Date</th>
                   <th>Modified Date</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1,002</td>
-                  <td>amet</td>
-                  <td>Active</td>
-                  <td>01/01/2012</td>
-                  <td>01/01/2012</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>Integer</td>
-                  <td>Active</td>
-                  <td>01/01/2012</td>
-                  <td>01/01/2012</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>libero</td>
-                  <td>Active</td>
-                  <td>01/01/2012</td>
-                  <td>01/01/2012</td>
-                </tr>
-                <tr>
-                  <td>1,004</td>
-                  <td>dapibus</td>
-                  <td>Active</td>
-                  <td>01/01/2012</td>
-                  <td>01/01/2012</td>
-                </tr>
-                <tr>
-                  <td>1,005</td>
-                  <td>Nulla</td>
-                  <td>quis</td>
-                  <td>sem</td>
-                  <td>at</td>
-                </tr>
-                <tr>
-                  <td>1,006</td>
-                  <td>nibh</td>
-                  <td>elementum</td>
-                  <td>imperdiet</td>
-                  <td>Duis</td>
-                </tr>
-                <tr>
-                  <td>1,007</td>
-                  <td>sagittis</td>
-                  <td>ipsum</td>
-                  <td>Praesent</td>
-                  <td>mauris</td>
-                </tr>
-                <tr>
-                  <td>1,008</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>1,009</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
-                  <td>Mauris</td>
-                </tr>
-                <tr>
-                  <td>1,010</td>
-                  <td>massa</td>
-                  <td>Vestibulum</td>
-                  <td>lacinia</td>
-                  <td>arcu</td>
-                </tr>
-                <tr>
-                  <td>1,011</td>
-                  <td>eget</td>
-                  <td>nulla</td>
-                  <td>Class</td>
-                  <td>aptent</td>
-                </tr>
-                <tr>
-                  <td>1,012</td>
-                  <td>taciti</td>
-                  <td>sociosqu</td>
-                  <td>ad</td>
-                  <td>litora</td>
-                </tr>
+            {% if patient_list %}
+                {% for patient in patient_list %}
+                    <a href="doctor-individual-diagnosis.html"><tr>
+                        <td>{{ patient.name }}</td>
+                        <td>{{ patient.created }}</td>
+                        <td>{{ patient.modified }}</td>
+                    </tr></a>
+                {% endfor %}
+            {% else %}
+                <p>No patients are available.</p>
+            {% endif %}
               </tbody>
             </table>
           </div>
