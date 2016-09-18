@@ -12,8 +12,10 @@ class DoctorAdmin(admin.ModelAdmin):
     pass
 
 
-class DoctorAdmin(admin.ModelAdmin):
-    pass
+class DiagnoseAdmin(admin.ModelAdmin):
+    list_display = ('patient', 'treatment', 'duration')
+
 
 admin.site.register(Patient, PatientAdmin)
 admin.site.register(Doctor, DoctorAdmin)
+admin.site.register(Diagnose, DiagnoseAdmin)
