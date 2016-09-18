@@ -13,7 +13,7 @@ class DoctorAdmin(admin.ModelAdmin):
 
 
 class DiagnoseAdmin(admin.ModelAdmin):
-    list_display = ('patient', 'treatment', 'duration')
+    list_display = ('patient', 'treatment', 'duration', 'created')
 
 
 class MatrixAdmin(admin.ModelAdmin):

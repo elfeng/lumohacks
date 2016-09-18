@@ -27,3 +27,6 @@ class Patient(models.Model):
     smoking = models.IntegerField(null=True)
     constipation = models.IntegerField(null=True)
     diabetes = models.IntegerField(null=True)
+
+    def __unicode__(self):
+        return unicode(self.user.username)
