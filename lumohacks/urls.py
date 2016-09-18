@@ -16,14 +16,15 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # url(r'^(?P<patient_inspect_id>[0-9]+)/$', views.inspect, name='patient_inspect'),
     url(r'^(?P<doctor_id>[0-9]+)/$', views.doctor, name='doctor'),
     url(r'^(?P<patient_id>[0-9]+)/$', views.patient, name='patient'),
     url(r'^admin/', admin.site.urls),
-    url(r'^login/', views.login, name="login"),
+    url(r'^login/', auth_views.login, name="login"),
     url(r'^register/', views.register, name="register"),
-    url(r'^logout/', views.logout_view, name="logout"),
+    # url(r'^logout/', views.logout_view, name="logout"),
     url(r'^$', views.home, name='home'),
 ]

@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 def register(request):
     if request.method == "POST":
-        user = User.objects.create_user(request.POST.get('username'), request.POST.get('password'))
+        user = User.objects.create_user(username=request.POST.get('username'), password=request.POST.get('password'))
         user.save()
         if request.POST.get('type') == 'doctor':
             doctor = Doctor.objects.create(user=user)
@@ -21,23 +21,9 @@ def register(request):
         return render(request, 'register.html', {})
 
 
-def login(request):
-    if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            return redirect('home')
-        else:
-            # No backend authenticated the credentials
-            return render(request, 'login.html', {'error': 'Authenticate fails'})
-    else:
-        return render(request, 'login.html', {})
-
-
 def logout_view(request):
     logout(request)
-    return render(request, 'login.html', {})
+    return render(request, 'registration/login.html', {})
 
 
 @login_required
