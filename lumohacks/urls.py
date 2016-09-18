@@ -18,6 +18,9 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
+    url(r'^(?P<patient_inspect_id>[0-9]+)/$', views.inspect, name='patient_inspect'),
+    url(r'^(?P<doctor_id>[0-9]+)/$', views.doctor, name='doctor'),
+    url(r'^(?P<patient_id>[0-9]+)/$', views.patient, name='patient'),
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home, name='home'),
 ]
